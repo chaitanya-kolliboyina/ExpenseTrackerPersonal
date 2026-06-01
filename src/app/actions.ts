@@ -3,7 +3,9 @@
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-const prisma = new PrismaClient();
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+const prisma = globalForPrisma.prisma ?? new PrismaClient();
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 export async function getExpenses() {
     const data = await prisma.expense.findMany({
