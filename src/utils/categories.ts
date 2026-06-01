@@ -1,0 +1,67 @@
+export const CATS: Record<string, { label: string; icon: string; color: string; subs: string[] }> = {
+    groceries: { label: "Groceries", icon: "🛒", color: "#4ade80", subs: ["Fresh Produce", "Dairy", "Meat & Fish", "Packaged Foods", "Beverages", "Other"] },
+    food: { label: "Food & Dining", icon: "🍽️", color: "#fb923c", subs: ["Restaurant", "Delivery (Zomato/Swiggy)", "Fast Food", "Café", "Other"] },
+    fuel: { label: "Fuel & Vehicle", icon: "⛽", color: "#f97316", subs: ["Petrol/Diesel", "CNG / EV Charge", "Maintenance", "Insurance", "Parking & Toll", "Other"] },
+    rent: { label: "Rent", icon: "🏠", color: "#c084fc", subs: ["Home Rent", "PG / Hostel", "Office Rent", "Other"] },
+    utilities: { label: "Utilities", icon: "⚡", color: "#facc15", subs: ["Electricity", "Water", "Internet", "Mobile / DTH", "Gas / LPG", "Other"] },
+    health: { label: "Health & Wellness", icon: "💊", color: "#2dd4bf", subs: ["Doctor / Hospital", "Medicines", "Gym / Fitness", "Mental Health", "Other"] },
+    savings: { label: "Savings", icon: "🏦", color: "#34d399", subs: ["FD", "Savings Account", "Emergency Fund", "Other"] },
+    investments: { label: "Investments", icon: "📈", color: "#818cf8", subs: ["Stocks / MF", "RD", "PPF / EPF", "Gold", "Crypto", "NPS", "Other"] },
+    loans: { label: "Loans & EMI", icon: "💳", color: "#f43f5e", subs: ["Home Loan", "Car Loan", "Personal Loan", "Credit Card EMI", "Education Loan", "Other"] },
+    appliances: { label: "Home & Appliances", icon: "🏡", color: "#60a5fa", subs: ["Kitchen Appliance", "Furniture", "Electronics", "Maintenance & Repair", "Cleaning", "Other"] },
+    personal: { label: "Personal Care", icon: "🪞", color: "#fb7185", subs: ["Clothing", "Haircut / Salon", "Skincare", "Gifts", "Other"] },
+    entertainment: { label: "Entertainment", icon: "🎬", color: "#a78bfa", subs: ["OTT Subscriptions", "Movies / Events", "Gaming", "Books", "Other"] },
+    travel: { label: "Travel", icon: "✈️", color: "#38bdf8", subs: ["Flights", "Hotels", "Cab / Auto / Metro", "Train / Bus", "Other"] },
+    education: { label: "Education", icon: "📚", color: "#fbbf24", subs: ["Courses / Classes", "Books & Materials", "School / College Fees", "Other"] },
+    business: { label: "Business", icon: "💼", color: "#94a3b8", subs: ["Office Supplies", "Software / Subscriptions", "Marketing", "Client Expenses", "Other"] },
+};
+
+const KW: [RegExp, string, string][] = [
+    [/zomato|swiggy|food delivery|dominos|pizza|burger/i, "food", "Delivery (Zomato/Swiggy)"],
+    [/restaurant|cafe|café|dine|mess|dhaba/i, "food", "Restaurant"],
+    [/petrol|diesel|bpcl|hpcl|iocl|indian oil|hp fuel/i, "fuel", "Petrol/Diesel"],
+    [/cng|ev charg|electric vehicle/i, "fuel", "CNG / EV Charge"],
+    [/puncture|tyre|car wash|vehicle service|bike service/i, "fuel", "Maintenance"],
+    [/bescom|msedcl|electricity|power bill|eb bill/i, "utilities", "Electricity"],
+    [/water bill|water tax/i, "utilities", "Water"],
+    [/internet|broadband|jio fiber|airtel fiber|act broadband/i, "utilities", "Internet"],
+    [/recharge|airtel|jio |vi |vodafone|bsnl|tata sky|dish tv/i, "utilities", "Mobile / DTH"],
+    [/lpg|indane|hp gas|bharat gas/i, "utilities", "Gas / LPG"],
+    [/dmart|bigbasket|zepto|blinkit|instamart|reliance fresh|sabzi/i, "groceries", "Fresh Produce"],
+    [/milk|dairy|curd|paneer|butter|cheese/i, "groceries", "Dairy"],
+    [/chicken|mutton|fish|egg|meat|seafood/i, "groceries", "Meat & Fish"],
+    [/netflix|prime video|hotstar|spotify|youtube premium/i, "entertainment", "OTT Subscriptions"],
+    [/movie|cinema|pvr|inox|ticket|concert|show|event/i, "entertainment", "Movies / Events"],
+    [/gym|fitness|cult\.fit|crossfit|yoga/i, "health", "Gym / Fitness"],
+    [/doctor|hospital|clinic|pharmacy|medicine/i, "health", "Doctor / Hospital"],
+    [/house rent|monthly rent|pg rent|hostel/i, "rent", "PG / Hostel"],
+    [/\brent\b/i, "rent", "Home Rent"],
+    [/credit card emi|emi\b/i, "loans", "Credit Card EMI"],
+    [/home loan|housing loan/i, "loans", "Home Loan"],
+    [/sip|mutual fund|\bmf\b|groww|zerodha|kite/i, "investments", "Stocks / MF"],
+    [/\brd\b|recurring deposit/i, "investments", "RD"],
+    [/ppf|epf|provident fund|nps/i, "investments", "PPF / EPF"],
+    [/\bgold\b|digital gold/i, "investments", "Gold"],
+    [/crypto|bitcoin|ethereum/i, "investments", "Crypto"],
+    [/\bfd\b|fixed deposit/i, "savings", "FD"],
+    [/emergency fund/i, "savings", "Emergency Fund"],
+    [/refrigerator|washing machine|\bac\b|microwave/i, "appliances", "Kitchen Appliance"],
+    [/furniture|sofa|bed |table|chair/i, "appliances", "Furniture"],
+    [/laptop|mobile phone|smartphone|earphone|gadget/i, "appliances", "Electronics"],
+    [/amazon|flipkart/i, "appliances", "Electronics"],
+    [/myntra|ajio|clothing|clothes|shirt|fashion/i, "personal", "Clothing"],
+    [/salon|haircut|barber|spa/i, "personal", "Haircut / Salon"],
+    [/flight|airline|indigo|spicejet/i, "travel", "Flights"],
+    [/hotel|oyo|booking\.com|airbnb/i, "travel", "Hotels"],
+    [/ola|uber|rapido|\bauto\b|\bcab\b|metro/i, "travel", "Cab / Auto / Metro"],
+    [/train ticket|irctc|\bbus\b/i, "travel", "Train / Bus"],
+    [/udemy|coursera|course|tuition/i, "education", "Courses / Classes"],
+    [/aws|azure|gcp|hosting|domain|saas/i, "business", "Software / Subscriptions"],
+];
+
+export function detectCat(desc: string) {
+    for (const [re, cat, sub] of KW) {
+        if (re.test(desc)) return { category: cat, subsubcategory: sub };
+    }
+    return null;
+}
