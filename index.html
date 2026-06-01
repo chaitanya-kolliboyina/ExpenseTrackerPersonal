@@ -46,7 +46,7 @@
       background: none
     }
 
-    /* ── FIXED body configuration using 100dvh for mobile browsers ── */
+    /* ── Fixed body configuration using 100dvh for mobile browsers ── */
     body {
       background: #0d0d14;
       min-height: 100vh;
@@ -534,13 +534,12 @@
       border-color: rgba(244, 63, 94, .27)
     }
 
-    /* chart canvas */
+    /* Chart Canvas Elements Layout styles */
     .chart-box {
       position: relative;
       width: 100%
     }
 
-    /* insights sub-bar */
     .sub-bar-row {
       margin-bottom: 10px
     }
@@ -574,7 +573,6 @@
       transition: width .6s ease
     }
 
-    /* insights summary row */
     .sum-row {
       display: flex;
       justify-content: space-between;
@@ -599,7 +597,6 @@
       font-weight: 600
     }
 
-    /* empty state */
     .empty {
       text-align: center;
       color: #64748b;
@@ -613,7 +610,6 @@
       margin-bottom: 12px
     }
 
-    /* filter scroll (history) */
     .filter-scroll {
       display: flex;
       gap: 6px;
@@ -626,7 +622,7 @@
       display: none
     }
 
-    /* Sync Configuration CSS Overlay */
+    /* Sync Layout Setup Configuration Overlay */
     #sync-overlay {
       position: fixed;
       top: 0;
@@ -661,8 +657,9 @@
   <div id="sync-overlay" class="hidden">
     <div class="sync-modal">
       <h3 style="margin-bottom: 10px;">Setup Remote Sync Vault</h3>
-      <p style="font-size: 12px; color: #64748b; margin-bottom: 14px;">Paste your private JSON Bin or Database URL
-        endpoint here. This maps locally to this device and stays hidden on GitHub.</p>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 14px;">Paste your private Database URL endpoint or JSON
+        Bin string path here. This parameter stays saved securely on this device local environment and is never uploaded
+        to your GitHub source files.</p>
       <input type="text" id="sync-url-input" class="text-input" placeholder="https://api.jsonbin.io/v3/b/..."
         style="margin-bottom: 12px;" />
       <input type="password" id="sync-key-input" class="text-input" placeholder="Access Master API Key (if required)"
@@ -717,7 +714,7 @@
   <div id="toast"></div>
 
   <script>
-    // CATEGORIES Data Dictionary 
+    // DATA SCHEMAS DICTIONARIES
     const CATS = {
       groceries: { label: "Groceries", icon: "🛒", color: "#4ade80", subs: ["Fresh Produce", "Dairy", "Meat & Fish", "Packaged Foods", "Beverages", "Other"] },
       food: { label: "Food & Dining", icon: "🍽️", color: "#fb923c", subs: ["Restaurant", "Delivery (Zomato/Swiggy)", "Fast Food", "Café", "Other"] },
@@ -787,7 +784,7 @@
       return null;
     }
 
-    // STATE MANAGEMENT
+    // ROUTER CORE ENGINE APP STATES
     let expenses = JSON.parse(localStorage.getItem('xpns_v3') || '[]');
     let period = 'monthly';
     let tab = 'dashboard';
@@ -798,8 +795,8 @@
     let confirmDelId = null, confirmDelTimer = null;
     const CI = {};
 
-    // REMOTE SYNC HOOKS
-    // To prompt credentials input, remove 'true' and check localStorage keys
+    // REMOTE SYNC VAULT CONFIGURATION SWITCH
+    // Set to 'true' to activate the remote data sync feature
     const ENABLE_REMOTE_SYNC = false;
 
     function checkSyncSetup() {
@@ -813,7 +810,7 @@
     function saveSyncCredentials() {
       const url = document.getElementById('sync-url-input').value.trim();
       const key = document.getElementById('sync-key-input').value.trim();
-      if (!url) return alert('URL required');
+      if (!url) return alert('Storage Connection URL Endpoint Required');
       localStorage.setItem('sync_vault_url', url);
       localStorage.setItem('sync_vault_key', key);
       document.getElementById('sync-overlay').classList.add('hidden');
@@ -832,7 +829,7 @@
           headers: { 'Content-Type': 'application/json', 'X-Master-Key': key },
           body: JSON.stringify(expenses)
         });
-      } catch (err) { console.error('Cloud upload failed:', err); }
+      } catch (err) { console.error('Cloud upload syncing sequence failed:', err); }
     }
 
     async function pullFromRemoteEngine() {
@@ -848,7 +845,7 @@
           localStorage.setItem('xpns_v3', JSON.stringify(expenses));
           renderTab(tab);
         }
-      } catch (err) { console.error('Cloud pull failed:', err); }
+      } catch (err) { console.error('Cloud download pulling sequence failed:', err); }
     }
 
     function save() {
@@ -856,7 +853,7 @@
       if (ENABLE_REMOTE_SYNC) pushToRemoteEngine();
     }
 
-    // FORMATTERS
+    // DATA TRANSFORM FORMATTERS
     function fmt(n) {
       if (n >= 1e5) return '₹' + (n / 1e5).toFixed(1) + 'L';
       if (n >= 1e3) return '₹' + (n / 1e3).toFixed(1) + 'K';
@@ -866,7 +863,7 @@
     function fmtDate(s) { return new Date(s).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' }); }
     function todayStr() { return new Date().toISOString().split('T')[0]; }
 
-    // FILTERING
+    // FILTER CALCULATORS
     function filterByPeriod(arr, p) {
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -935,7 +932,7 @@
       return Object.entries(map).map(([label, value]) => ({ label, value }));
     }
 
-    // CHARTS INITIALIZATION CONFIG
+    // CANVAS CHART RENDERING HOOKS
     Chart.defaults.color = '#64748b';
     Chart.defaults.font.family = "'Plus Jakarta Sans',sans-serif";
     function destroyChart(id) { if (CI[id]) { CI[id].destroy(); delete CI[id]; } }
@@ -948,7 +945,7 @@
       padding: 8, callbacks: { label: ctx => ` ${fmtFull(ctx.raw)}` }
     };
 
-    // UI TABS ROUTER
+    // ACTIONS TABS COMPONENT ROUTER
     document.querySelectorAll('.nav-btn').forEach(btn => {
       btn.addEventListener('click', () => switchTab(btn.dataset.tab));
     });
@@ -979,7 +976,7 @@
       });
     });
 
-    // DASHBOARD MODULE
+    // DASHBOARD RUNTIME VIEW RENDERER
     function renderDashboard() {
       const filtered = filterByPeriod(expenses, period);
       const total = filtered.reduce((s, e) => s + e.amount, 0);
@@ -1082,7 +1079,7 @@
             datasets: [{
               data: ts.map(t => t.value),
               backgroundColor: barColors,
-              borderRadius: { topLeft: 4, topRight: 4, bottomLeft: 0, bottomRight: 0 },
+              borderRadius: { topLeft: 4, topRight: 4, bottomLeft: 0, bottomRight: 4 },
               borderSkipped: false, barThickness: 14
             }]
           },
@@ -1098,7 +1095,7 @@
       }
     }
 
-    // ADD EXPENSES FORM MODULE
+    // FORM INPUT BUILD ENGINE VIEWS
     function renderAdd() {
       const subs = fCategory ? CATS[fCategory]?.subs || [] : [];
       const detectVisible = detected && !accepted;
@@ -1197,7 +1194,7 @@
       switchTab('dashboard');
     }
 
-    // HISTORY LEDGER MODULE
+    // HISTORY QUERY CONTROLLER VIEWS
     function renderHistory() {
       let html = `<input type="text" class="text-input" id="hist-search" placeholder="🔍  Search transactions…" value="${histSearch}" style="margin-bottom:10px"/>`;
 
@@ -1269,7 +1266,7 @@
       }
     }
 
-    // INSIGHTS ANALYTICS MODULE
+    // INSIGHTS METRICS ANALYSIS MODULE
     function renderInsights() {
       const filtered = filterByPeriod(expenses, period);
       const catData = getCatData(filtered);
@@ -1384,14 +1381,14 @@
       }
     }
 
-    // TOAST SYSTEMS
+    // TOAST OVERLAY NOTIFICATIONS ENGINE
     function showToast(msg) {
       const t = document.getElementById('toast');
       t.textContent = msg; t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 2200);
     }
 
-    // APP ENTRY POINT
+    // PROGRAM BOOT ENTRY POINT
     checkSyncSetup();
     renderDashboard();
     renderAdd();
